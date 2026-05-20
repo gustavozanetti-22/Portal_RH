@@ -26,33 +26,31 @@ if(!isset($_SESSION['usuario'])){
         <!-- SIDEBAR -->
         <div class="sidebar">
 
-            <h2>RH Digital</h2>
+            <h2>MacosTech - RH</h2>
 
             <ul>
+
 
                 <li>
                     <a href="funcionarios.php">Funcionários</a>
                 </li>
 
                 <li>
-                    <a href="#">Férias</a>
+                    <a href="ferias.php">Férias</a>
                 </li>
 
                 <li>
-                    <a href="#">Controle de Ponto</a>
+                    <a href="ponto.php">Controle de Ponto</a>
                 </li>
 
                 <li>
-                    <a href="#">Reembolsos</a>
+                    <a href="beneficios.php">Benefícios</a>
                 </li>
 
                 <li>
-                    <a href="#">Benefícios</a>
+                    <a href="index.php">Logout</a>
                 </li>
 
-                <li>
-                    <a href="#">Desligamentos</a>
-                </li>
 
             </ul>
 
@@ -61,7 +59,7 @@ if(!isset($_SESSION['usuario'])){
         <!-- CONTEÚDO -->
         <div class="content">
 
-            <h1>Bem-vindo ao RH Digital</h1>
+            <h1>Bem-vindo ao Portal RH</h1>
 
             <div class="cards">
 
@@ -72,23 +70,31 @@ if(!isset($_SESSION['usuario'])){
         <p>Gerencie os colaboradores</p>
     </div>
 
-</a>
+</a> 
+
+<a href="ferias.php" class="card-link">
 
                 <div class="card">
                     <h3>Férias</h3>
-                    <p>Controle de solicitações</p>
+                    <p>Controle de férias</p>
                 </div>
+</a>
+
+<a href="ponto.php" class="card-link">
 
                 <div class="card">
                     <h3>Ponto</h3>
                     <p>Registro de jornada</p>
                 </div>
+</a> 
+
+<a href="beneficios.php" class="card-link">
 
                 <div class="card">
-                    <h3>Reembolsos</h3>
-                    <p>Gestão de despesas</p>
+                    <h3>Benefícios</h3>
+                    <p>Controle de beneficios</p>
                 </div>
-
+</a> 
             </div>
 
         </div>

@@ -12,205 +12,160 @@ if(!isset($_SESSION['usuario'])){
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Ponto - RH Digital</title>
+
+    <title>Controle de Ponto</title>
 
     <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="css/ponto.css">
+
 </head>
 <body>
 
-    <div class="dashboard">
+<div class="modal-mes" id="modalMes">
 
-        <!-- MENU -->
-        <div class="sidebar">
+    <div class="modal-box">
 
-            <h2>RH Digital</h2>
+        <h2>Selecionar Mês</h2>
 
-            <ul>
+        <input type="month" id="mesSelecionado">
 
-                <li>
-                    <a href="dashboard.php">Dashboard</a>
-                </li>
+        <button onclick="selecionarMes()">
 
-                <li>
-                    <a href="funcionarios.php">Funcionários</a>
-                </li>
+            Continuar
 
-                <li>
-                    <a href="ferias.php">Férias</a>
-                </li>
+        </button>
 
-                <li>
-                    <a href="ponto.php">Controle de Ponto</a>
-                </li>
+    </div>
 
-                <li>
-                    <a href="reembolsos.php">Reembolsos</a>
-                </li>
+</div>
 
-                <li>
-                    <a href="beneficios.php">Benefícios</a>
-                </li>
+<div class="dashboard">
 
-                <li>
-                    <a href="logout.php">Sair</a>
-                </li>
+    <div class="sidebar">
 
-            </ul>
+        <h2>MacosTech</h2>
+
+        <ul>
+
+            <li>
+                <a href="dashboard.php">Página inicial</a>
+            </li>
+
+            <li>
+                <a href="funcionarios.php">Funcionários</a>
+            </li>
+
+            <li>
+                <a href="beneficios.php">Benefícios</a>
+            </li>
+
+            <li>
+                <a href="ferias.php">Férias</a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div class="content">
+
+        <div class="topo-ponto">
+
+            <h1>
+
+                Controle de Ponto
+
+            </h1>
+
+            <button 
+                class="btn-relatorio"
+                onclick="gerarRelatorio()"
+            >
+
+                Gerar Relatório
+
+            </button>
 
         </div>
 
-        <!-- CONTEÚDO -->
-        <div class="content">
+        <div class="cards-ponto">
 
-            <div class="topo-ponto">
+            <div class="card-ponto">
 
-                <h1>Controle de Ponto</h1>
+                <h3>Total Folha</h3>
 
-                <button class="btn-ponto">
-                    + Novo Registro
-                </button>
-
-            </div>
-
-            <!-- CARDS -->
-            <div class="cards-ponto">
-
-                <div class="card-ponto">
-                    <h3>Horas Trabalhadas</h3>
-                    <p>160h</p>
-                </div>
-
-                <div class="card-ponto">
-                    <h3>Horas Extras</h3>
-                    <p>12h</p>
-                </div>
-
-                <div class="card-ponto">
-                    <h3>Faltas</h3>
-                    <p>1</p>
-                </div>
+                <p id="totalFolha">
+                    R$ 0
+                </p>
 
             </div>
 
-            <!-- FORMULÁRIO -->
-            <div class="form-ponto">
+            <div class="card-ponto">
 
-                <h2>Registrar Ponto</h2>
+                <h3>Total Atrasos</h3>
 
-                <form>
-
-                    <div class="grid-ponto">
-
-                        <div class="input-group">
-                            <label>Funcionário</label>
-                            <input type="text">
-                        </div>
-
-                        <div class="input-group">
-                            <label>Data</label>
-                            <input type="date">
-                        </div>
-
-                        <div class="input-group">
-                            <label>Entrada</label>
-                            <input type="time">
-                        </div>
-
-                        <div class="input-group">
-                            <label>Saída</label>
-                            <input type="time">
-                        </div>
-
-                    </div>
-
-                    <button type="submit" class="btn-salvar-ponto">
-                        Salvar Registro
-                    </button>
-
-                </form>
+                <p id="totalAtrasos">
+                    0 min
+                </p>
 
             </div>
 
-            <!-- TABELA -->
-            <div class="tabela-ponto">
+            <div class="card-ponto">
 
-                <h2>Registros de Ponto</h2>
+                <h3>Horas Extras</h3>
 
-                <table>
-
-                    <thead>
-
-                        <tr>
-                            <th>ID</th>
-                            <th>Funcionário</th>
-                            <th>Data</th>
-                            <th>Entrada</th>
-                            <th>Saída</th>
-                            <th>Horas Extras</th>
-                            <th>Ações</th>
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        <tr>
-
-                            <td>1</td>
-                            <td>Gustavo Zanetti</td>
-                            <td>14/05/2026</td>
-                            <td>08:00</td>
-                            <td>18:00</td>
-                            <td>2h</td>
-
-                            <td>
-
-                                <button class="btn-editar">
-                                    Editar
-                                </button>
-
-                                <button class="btn-excluir">
-                                    Excluir
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-                        <tr>
-
-                            <td>2</td>
-                            <td>Maria Silva</td>
-                            <td>14/05/2026</td>
-                            <td>09:00</td>
-                            <td>17:00</td>
-                            <td>0h</td>
-
-                            <td>
-
-                                <button class="btn-editar">
-                                    Editar
-                                </button>
-
-                                <button class="btn-excluir">
-                                    Excluir
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
+                <p id="horasExtras">
+                    0 min
+                </p>
 
             </div>
+
+        </div>
+
+        <div class="tabela-ponto">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Funcionário</th>
+
+                        <th>Cargo</th>
+
+                        <th>Salário</th>
+
+                        <th>Total Receber</th>
+
+                        <th>Atrasos</th>
+
+                        <th>Horas Extras</th>
+
+                        <th>Ações</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="tabelaFuncionarios">
+
+                </tbody>
+
+            </table>
 
         </div>
 
     </div>
+
+</div>
+
+<script src="js/ponto.js"></script>
 
 </body>
 </html>

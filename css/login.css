@@ -1,0 +1,221 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #f4f6f9;
+
+    height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+/* CONTAINER */
+
+.login-container{
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 20px;
+
+}
+
+/* CARD LOGIN */
+
+.login-box{
+
+    width: 100%;
+
+    max-width: 420px;
+
+    background-color: white;
+
+    padding: 45px;
+
+    border-radius: 18px;
+
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.08);
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+/* TITULO */
+
+.login-box h1{
+
+    font-size: 34px;
+
+    color: #111827;
+
+    margin-bottom: 10px;
+
+    text-align: center;
+
+}
+
+/* ERRO */
+
+.erro{
+
+    background-color: #fee2e2;
+
+    color: #b91c1c;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    margin-bottom: 20px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+}
+
+/* INPUTS */
+
+.input-group{
+
+    display: flex;
+
+    flex-direction: column;
+
+    margin-bottom: 22px;
+
+}
+
+.input-group label{
+
+    margin-bottom: 8px;
+
+    font-weight: 600;
+
+    color: #374151;
+
+    font-size: 14px;
+
+}
+
+.input-group input{
+
+    padding: 15px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 12px;
+
+    font-size: 15px;
+
+    transition: 0.3s;
+
+    background-color: #f9fafb;
+
+}
+
+.input-group input:focus{
+
+    outline: none;
+
+    border-color: #2563eb;
+
+    box-shadow: 0px 0px 0px 4px rgba(37,99,235,0.12);
+
+    background-color: white;
+
+}
+
+/* BOTÃO */
+
+.btn-login{
+
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #1e3a8a,
+        #2563eb
+    );
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+
+    margin-top: 10px;
+
+}
+
+.btn-login:hover{
+
+    transform: translateY(-2px);
+
+    opacity: 0.95;
+
+}
+
+/* LINK VOLTAR */
+
+.voltar{
+
+    margin-top: 22px;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+
+}
+
+.voltar:hover{
+
+    color: #2563eb;
+
+}
+
+/* RESPONSIVO */
+
+@media(max-width: 500px){
+
+    .login-box{
+
+        padding: 30px;
+
+    }
+
+}

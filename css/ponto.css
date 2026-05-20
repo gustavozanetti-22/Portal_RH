@@ -1,0 +1,188 @@
+body{
+    background-color: #f3f4f6;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.topo-ponto{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.cards-ponto{
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card-ponto{
+    flex: 1;
+    background-color: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+}
+
+.card-ponto h3{
+    color: #6b7280;
+    margin-bottom: 10px;
+}
+
+.card-ponto p{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.tabela-ponto{
+    background-color: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th{
+    background-color: #1e3a8a;
+    color: white;
+    padding: 16px;
+    text-align: left;
+}
+
+table td{
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.input-hora{
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+}
+
+.btn-ponto,
+.btn-relatorio,
+.btn-aplicar,
+.btn-salvar-tudo{
+
+    background: linear-gradient(
+        135deg,
+        #1e3a8a,
+        #2563eb
+    );
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+.btn-voltar{
+
+    background-color: #374151;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+.modal-mes{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-box{
+    background-color: white;
+    padding: 40px;
+    border-radius: 16px;
+    width: 350px;
+}
+
+.modal-box input{
+    width: 100%;
+    padding: 14px;
+    margin: 20px 0;
+}
+
+.modal-box button{
+    width: 100%;
+    padding: 14px;
+}
+
+.config-box{
+
+    background-color: white;
+
+    padding: 25px;
+
+    border-radius: 16px;
+
+    margin-bottom: 30px;
+
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+
+}
+
+.config-grid{
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+
+}
+
+.config-grid input{
+
+    width: 100%;
+
+    padding: 12px;
+
+}
+
+.falta-check{
+    width: 20px;
+    height: 20px;
+}
+
+.status-ok{
+    color: green;
+    font-weight: bold;
+}
+
+.status-falta{
+    color: red;
+    font-weight: bold;
+}
+
+.acoes-topo{
+    display: flex;
+    gap: 15px;
+}

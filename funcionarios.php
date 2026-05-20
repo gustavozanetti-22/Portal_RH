@@ -12,48 +12,44 @@ if(!isset($_SESSION['usuario'])){
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Funcionários - RH Digital</title>
 
     <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="css/funcionarios.css">
+
 </head>
 <body>
 
     <div class="dashboard">
 
-        <!-- MENU LATERAL -->
+        <!-- MENU -->
         <div class="sidebar">
 
-            <h2>RH Digital</h2>
+            <h2>MacosTech</h2>
 
             <ul>
 
                 <li>
-                    <a href="dashboard.php">Dashboard</a>
+                    <a href="dashboard.php">Página Inicial</a>
                 </li>
 
                 <li>
-                    <a href="funcionarios.php">Funcionários</a>
+                    <a href="ferias.php">Férias</a>
                 </li>
 
                 <li>
-                    <a href="#">Férias</a>
+                    <a href="ponto.php">Controle de Ponto</a>
                 </li>
 
                 <li>
-                    <a href="#">Controle de Ponto</a>
+                    <a href="beneficios.php">Benefícios</a>
                 </li>
-
-                <li>
-                    <a href="#">Reembolsos</a>
-                </li>
-
-                <li>
-                    <a href="logout.php">Sair</a>
-                </li>
-
-            </ul>
 
         </div>
 
@@ -64,48 +60,65 @@ if(!isset($_SESSION['usuario'])){
 
                 <h1>Funcionários</h1>
 
-                <button class="btn-cadastrar">
+                <button class="btn-funcionario" onclick="abrirFormulario()">
                     + Novo Funcionário
                 </button>
 
             </div>
 
-            <!-- FORMULÁRIO -->
+            <!-- CARDS -->
+            <div class="cards-funcionarios">
+
+                <div class="card-funcionario">
+
+                    <h3>Total Funcionários</h3>
+
+                    <p id="totalFuncionarios">0</p>
+
+                </div>
+
+                <div class="card-funcionario">
+
+                    <h3>Folha Salarial</h3>
+
+                    <p id="folhaSalarial">R$ 0</p>
+
+                </div>
+
+            </div>
+
+            <!-- FILTROS -->
             <div class="form-funcionario">
 
-                <h2>Cadastrar Funcionário</h2>
+                <h2>Filtrar Funcionários</h2>
 
-                <form>
+                <div class="grid-funcionarios">
 
-                    <div class="grid-form">
+                    <div class="input-group">
 
-                        <div class="input-group">
-                            <label>Nome</label>
-                            <input type="text">
-                        </div>
+                        <label>Nome</label>
 
-                        <div class="input-group">
-                            <label>Email</label>
-                            <input type="email">
-                        </div>
-
-                        <div class="input-group">
-                            <label>Cargo</label>
-                            <input type="text">
-                        </div>
-
-                        <div class="input-group">
-                            <label>Salário</label>
-                            <input type="number">
-                        </div>
+                        <input 
+                            type="text"
+                            id="filtroNome"
+                            placeholder="Digite o nome"
+                        >
 
                     </div>
 
-                    <button type="submit" class="btn-salvar">
-                        Salvar Funcionário
-                    </button>
+                    <div class="input-group">
 
-                </form>
+                        <label>Cargo</label>
+
+                        <input 
+                            type="text"
+                            id="filtroCargo"
+                            placeholder="Digite o cargo"
+                        >
+
+                    </div>
+
+                </div>
 
             </div>
 
@@ -119,57 +132,19 @@ if(!isset($_SESSION['usuario'])){
                     <thead>
 
                         <tr>
+
                             <th>ID</th>
                             <th>Nome</th>
-                            <th>Email</th>
                             <th>Cargo</th>
                             <th>Salário</th>
+                            <th>Email</th>
                             <th>Ações</th>
+
                         </tr>
 
                     </thead>
 
-                    <tbody>
-
-                        <tr>
-                            <td>1</td>
-                            <td>Gustavo Zanetti</td>
-                            <td>gustavo@email.com</td>
-                            <td>Desenvolvedor</td>
-                            <td>R$ 5.000</td>
-
-                            <td>
-
-                                <button class="btn-editar">
-                                    Editar
-                                </button>
-
-                                <button class="btn-excluir">
-                                    Excluir
-                                </button>
-
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>2</td>
-                            <td>Maria Silva</td>
-                            <td>maria@email.com</td>
-                            <td>RH</td>
-                            <td>R$ 4.200</td>
-
-                            <td>
-
-                                <button class="btn-editar">
-                                    Editar
-                                </button>
-
-                                <button class="btn-excluir">
-                                    Excluir
-                                </button>
-
-                            </td>
-                        </tr>
+                    <tbody id="tabelaFuncionarios">
 
                     </tbody>
 
@@ -180,6 +155,8 @@ if(!isset($_SESSION['usuario'])){
         </div>
 
     </div>
+
+    <script src="js/funcionarios.js"></script>
 
 </body>
 </html>

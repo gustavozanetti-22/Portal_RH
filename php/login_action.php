@@ -2,7 +2,7 @@
 
 session_start();
 
-include("C:xampp\htdocs\Projeto\database\conexao.php");
+include("C:xampp\htdocs\Portal_RH\database\conexao.php");
 
 $email = $_POST['email'];
 $senha = $_POST['senha'];
