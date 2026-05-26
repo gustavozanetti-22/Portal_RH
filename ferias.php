@@ -1,12 +1,5 @@
 <?php
-
 session_start();
-
-if(!isset($_SESSION['usuario'])){
-    header("Location: login.php");
-    exit();
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -15,91 +8,75 @@ if(!isset($_SESSION['usuario'])){
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Férias</title>
+    <title>
+        Férias - MacosRH
+    </title>
 
-    <link rel="stylesheet" href="css/style.css">
-
-    <link rel="stylesheet" href="css/ferias.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link
+        rel="stylesheet"
+        href="css/ferias.css"
+    >
 
 </head>
 <body>
 
-<div class="dashboard">
+    <div class="container">
 
-    <!-- MENU -->
-    <div class="sidebar">
+        <div class="topo">
 
-        <h2>MacosTech</h2>
+            <h1>
+                Controle de Férias
+            </h1>
 
-            <ul>
+            <div class="acoes-topo">
 
-                <li>
-                    <a href="dashboard.php">Página Inicial</a>
-                </li>
+                <a
+                    href="dashboard.php"
+                    class="btn-home"
+                >
+                    Página Inicial
+                </a>
 
-                <li>
-                    <a href="funcionarios.php">Funcionários</a>
-                </li>
+                <a
+                    href="php/logout.php"
+                    class="btn-logout"
+                >
+                    Logout
+                </a>
 
-                <li>
-                    <a href="ponto.php">Controle de Ponto</a>
-                </li>
+            </div>
 
-                <li>
-                    <a href="beneficios.php">Benefícios</a>
-                </li>
+        </div>
 
+        <div class="filtro-ano-ferias">
 
-    </div>
+            <label for="ano-ferias">
+                Ano de referência
+            </label>
 
-    <!-- CONTEÚDO -->
-    <div class="content">
+            <select id="ano-ferias">
 
-        <div class="topo-ferias">
+                <option value="2026">2026</option>
 
-            <h1>Controle de Férias</h1>
+            </select>
 
-            <button class="btn-relatorio" onclick="gerarRelatorio()">
-
-                Gerar Relatório
-
+            <button
+                type="button"
+                class="btn-filtrar"
+                id="btn-carregar-ferias"
+            >
+                Visualizar
             </button>
 
         </div>
 
-        <!-- CARDS -->
-        <div class="cards-ferias">
-
-            <div class="card-ferias">
-
-                <h3>Total Funcionários</h3>
-
-                <p id="totalFuncionarios">0</p>
-
-            </div>
-
-            <div class="card-ferias">
-
-                <h3>Em férias</h3>
-
-                <p id="emFerias">0</p>
-
-            </div>
-
-            <div class="card-ferias">
-
-                <h3>Férias pagas</h3>
-
-                <p id="feriasPagas">0</p>
-
-            </div>
-
-        </div>
-
-        <!-- TABELA -->
-        <div class="tabela-ferias">
+        <div class="card">
 
             <table>
 
@@ -109,17 +86,25 @@ if(!isset($_SESSION['usuario'])){
 
                         <th>Funcionário</th>
 
-                        <th>Últimas férias</th>
+                        <th>Admissão</th>
 
-                        <th>Dias desde férias</th>
+                        <th>Base de Contagem</th>
+
+                        <th>Dias Trabalhados</th>
+
+                        <th>Última Férias</th>
+
+                        <th>Próxima Férias</th>
 
                         <th>Saída</th>
 
                         <th>Retorno</th>
 
-                        <th>Vendeu 10 dias</th>
+                        <th>Vendeu 10 Dias</th>
 
-                        <th>Férias pagas</th>
+                        <th>Férias Pagas</th>
+
+                        <th>Status</th>
 
                         <th>Ações</th>
 
@@ -127,7 +112,7 @@ if(!isset($_SESSION['usuario'])){
 
                 </thead>
 
-                <tbody id="tabelaFerias">
+                <tbody id="tbody-ferias">
 
                 </tbody>
 
@@ -137,9 +122,153 @@ if(!isset($_SESSION['usuario'])){
 
     </div>
 
-</div>
+    <div
+        class="modal"
+        id="modal-ferias"
+    >
 
-<script src="js/ferias.js"></script>
+        <div class="modal-content">
+
+            <h2>
+                Editar Férias
+            </h2>
+
+            <form id="form-ferias">
+
+                <input
+                    type="hidden"
+                    id="funcionario_id"
+                >
+
+                <input
+                    type="hidden"
+                    id="data_admissao_funcionario"
+                >
+
+                <div class="input-group">
+
+                    <label>
+                        Já tirou férias desde a admissão?
+                    </label>
+
+                    <select id="ja_tirou_ferias">
+
+                        <option value="1">
+                            Sim
+                        </option>
+
+                        <option value="0">
+                            Não
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Última vez que tirou férias
+                    </label>
+
+                    <input
+                        type="date"
+                        id="ultima_feria"
+                    >
+
+                    <small class="dica-ferias">
+                        Se marcar "Não", o sistema usará a data de admissão como base.
+                    </small>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Data saída férias
+                    </label>
+
+                    <input
+                        type="date"
+                        id="data_saida"
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Vendeu 10 dias?
+                    </label>
+
+                    <select id="vendeu_10_dias">
+
+                        <option value="0">
+                            Não
+                        </option>
+
+                        <option value="1">
+                            Sim
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Férias pagas?
+                    </label>
+
+                    <select id="ferias_pagas">
+
+                        <option value="0">
+                            Não
+                        </option>
+
+                        <option value="1">
+                            Sim
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Observações
+                    </label>
+
+                    <textarea
+                        id="observacoes"
+                    ></textarea>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn-salvar"
+                >
+                    Salvar
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-cancelar"
+                    onclick="fecharModal()"
+                >
+                    Cancelar
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script src="js/ferias.js"></script>
 
 </body>
 </html>

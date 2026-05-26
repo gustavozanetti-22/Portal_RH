@@ -1,64 +1,95 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Login - MacosTech -RH</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="css/login.css">
+    <title>
+        Login - MacosRH
+    </title>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link
+        rel="stylesheet"
+        href="css/login.css"
+    >
+
 </head>
 <body>
 
     <div class="login-container">
 
-        <form class="login-box" action="php/login_action.php" method="POST">
+        <div class="login-box">
 
-            <h1>Login</h1>
+            <div class="logo">
 
-            <?php
-            if(isset($_GET['erro'])){
-                echo "<p class='erro'>Email ou senha inválidos</p>";
-            }
-            ?>
+                <h1>
+                    MacosRH
+                </h1>
 
-            <div class="input-group">
-
-                <label>Email</label>
-
-                <input 
-                    type="email" 
-                    name="email" 
-                    placeholder="Digite seu email"
-                    required
-                >
+                <p>
+                    Sistema de Gestão de RH
+                </p>
 
             </div>
 
-            <div class="input-group">
+            <form id="login-form">
 
-                <label>Senha</label>
+                <div class="input-group">
 
-                <input 
-                    type="password" 
-                    name="senha" 
-                    placeholder="Digite sua senha"
-                    required
+                    <label>
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Digite seu email"
+                        required
+                    >
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Senha
+                    </label>
+
+                    <input
+                        type="password"
+                        id="senha"
+                        placeholder="Digite sua senha"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn-login"
                 >
+                    Entrar
+                </button>
 
-            </div>
+            </form>
 
-            <button type="submit" class="btn-login">
-                Entrar
-            </button>
+            <p
+                id="mensagem-erro"
+                class="erro"
+            >
+            </p>
 
-            <a href="index.php" class="voltar">
-                ← Voltar
-            </a>
-
-        </form>
+        </div>
 
     </div>
+
+    <script src="js/login.js"></script>
 
 </body>
 </html>

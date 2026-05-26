@@ -1,269 +1,346 @@
-let funcionarios = JSON.parse(localStorage.getItem("funcionarios")) || [
+const API = "api/funcionarios/";
 
-    {
-        id: 1,
-        nome: "Gustavo Zanetti",
-        cargo: "Desenvolvedor",
-        salario: 5000,
-        email: "gustavo@email.com"
-    },
+const tbody =
+document.getElementById(
+    "tbody-funcionarios"
+);
 
-    {
-        id: 2,
-        nome: "Maria Silva",
-        cargo: "RH",
-        salario: 4200,
-        email: "maria@email.com"
+const form =
+document.getElementById(
+    "form-funcionario"
+);
+
+let editando = null;
+
+function formatarData(data) {
+    if (!data) {
+        return "-";
     }
 
-];
+    const partes = data.split("-");
 
-function salvarLocalStorage(){
-
-    localStorage.setItem(
-        "funcionarios",
-        JSON.stringify(funcionarios)
-    );
-
-}
-
-function renderizarTabela(lista = funcionarios){
-
-    const tabela = document.getElementById("tabelaFuncionarios");
-
-    if(!tabela) return;
-
-    tabela.innerHTML = "";
-
-    lista.forEach(funcionario => {
-
-        tabela.innerHTML += `
-
-            <tr>
-
-                <td>${funcionario.id}</td>
-
-                <td>${funcionario.nome}</td>
-
-                <td>${funcionario.cargo}</td>
-
-                <td>
-                    R$ ${funcionario.salario}
-                </td>
-
-                <td>${funcionario.email}</td>
-
-                <td>
-
-                    <button 
-                        class="btn-editar"
-                        onclick="editarFuncionario(${funcionario.id})"
-                    >
-                        Editar
-                    </button>
-
-                    <button 
-                        class="btn-excluir"
-                        onclick="excluirFuncionario(${funcionario.id})"
-                    >
-                        Excluir
-                    </button>
-
-                </td>
-
-            </tr>
-
-        `;
-
-    });
-
-    atualizarCards(lista);
-
-}
-
-function atualizarCards(lista){
-
-    document.getElementById("totalFuncionarios").innerText = lista.length;
-
-    const folha = lista.reduce(
-        (total, funcionario) => total + Number(funcionario.salario),
-        0
-    );
-
-    document.getElementById("folhaSalarial").innerText =
-        "R$ " + folha.toLocaleString("pt-BR");
-
-}
-
-function filtrarFuncionarios(){
-
-    const nome = document
-    .getElementById("filtroNome")
-    .value
-    .toLowerCase();
-
-    const cargo = document
-    .getElementById("filtroCargo")
-    .value
-    .toLowerCase();
-
-    const filtrados = funcionarios.filter(funcionario => {
-
-        return (
-
-            funcionario.nome
-            .toLowerCase()
-            .includes(nome)
-
-            &&
-
-            funcionario.cargo
-            .toLowerCase()
-            .includes(cargo)
-
-        );
-
-    });
-
-    renderizarTabela(filtrados);
-
-}
-
-function abrirFormulario(){
-
-    localStorage.removeItem("funcionarioEditando");
-
-    window.location.href = "funcionario-formulario.php";
-
-}
-
-function editarFuncionario(id){
-
-    localStorage.setItem(
-        "funcionarioEditando",
-        id
-    );
-
-    window.location.href = "funcionario-formulario.php";
-
-}
-
-function excluirFuncionario(id){
-
-    funcionarios = funcionarios.filter(
-        funcionario => funcionario.id !== id
-    );
-
-    salvarLocalStorage();
-
-    renderizarTabela();
-
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    renderizarTabela();
-
-    const filtroNome = document.getElementById("filtroNome");
-
-    const filtroCargo = document.getElementById("filtroCargo");
-
-    if(filtroNome){
-
-        filtroNome.addEventListener(
-            "input",
-            filtrarFuncionarios
-        );
-
+    if (partes.length !== 3) {
+        return data;
     }
 
-    if(filtroCargo){
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+}
 
-        filtroCargo.addEventListener(
-            "input",
-            filtrarFuncionarios
-        );
+async function carregarFuncionarios(){
 
-    }
+    try{
 
-    const form = document.getElementById("formFuncionario");
-
-    if(form){
-
-        const idEditando = localStorage.getItem(
-            "funcionarioEditando"
-        );
-
-        if(idEditando){
-
-            const funcionario = funcionarios.find(
-                f => f.id == idEditando
+        const response =
+            await fetch(
+                API + "listar.php"
             );
 
-            if(funcionario){
+        const funcionarios =
+            await response.json();
 
-                document.getElementById("nome").value = funcionario.nome;
+        console.log(
+            "FUNCIONARIOS:",
+            funcionarios
+        );
 
-                document.getElementById("cargo").value = funcionario.cargo;
+        tbody.innerHTML = "";
 
-                document.getElementById("salario").value = funcionario.salario;
+        if(!Array.isArray(funcionarios)){
 
-                document.getElementById("email").value = funcionario.email;
+            alert(
+                funcionarios.message +
+                "\n" +
+                (funcionarios.erro || "")
+            );
+
+            return;
+        }
+
+        funcionarios.forEach(
+            funcionario => {
+
+                const funcionarioJson =
+                    JSON.stringify(funcionario)
+                    .replace(/'/g, "&apos;");
+
+                tbody.innerHTML += `
+
+                    <tr>
+
+                        <td>
+                            ${funcionario.nome}
+                        </td>
+
+                        <td>
+                            ${funcionario.cargo}
+                        </td>
+
+                        <td>
+                            R$
+                            ${parseFloat(
+                                funcionario.salario
+                            ).toFixed(2)}
+                        </td>
+
+                        <td>
+                            ${funcionario.email}
+                        </td>
+
+                        <td>
+                            ${
+                                formatarData(
+                                    funcionario.data_admissao
+                                )
+                            }
+                        </td>
+
+                        <td>
+                            ${
+                                funcionario.horario_entrada
+                                || "-"
+                            }
+                        </td>
+
+                        <td>
+                            ${
+                                funcionario.horario_saida
+                                || "-"
+                            }
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-editar"
+                                onclick='editarFuncionario(
+                                    ${funcionarioJson}
+                                )'
+                            >
+                                Editar
+                            </button>
+
+                            <button
+                                class="btn-excluir"
+                                onclick="
+                                    solicitarExclusao(
+                                        ${funcionario.id},
+                                        '${encodeURIComponent(funcionario.nome)}'
+                                    )
+                                "
+                            >
+                                Excluir
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
 
             }
+        );
+
+    }catch(error){
+
+        console.log(error);
+
+        alert(
+            "Erro ao carregar funcionários"
+        );
+
+    }
+
+}
+
+form.addEventListener(
+    "submit",
+    async function(e){
+
+        e.preventDefault();
+
+        const funcionario = {
+
+            nome:
+                document.getElementById(
+                    "nome"
+                ).value,
+
+            cargo:
+                document.getElementById(
+                    "cargo"
+                ).value,
+
+            salario:
+                document.getElementById(
+                    "salario"
+                ).value,
+
+            email:
+                document.getElementById(
+                    "email"
+                ).value,
+
+            data_admissao:
+                document.getElementById(
+                    "data_admissao"
+                ).value,
+
+            horario_entrada:
+                document.getElementById(
+                    "horario_entrada"
+                ).value,
+
+            horario_saida:
+                document.getElementById(
+                    "horario_saida"
+                ).value
+
+        };
+
+        if(editando){
+
+            funcionario.id =
+                editando;
 
         }
 
-        form.addEventListener("submit", (e) => {
+        const endpoint =
+            editando
+            ? "editar.php"
+            : "criar.php";
 
-            e.preventDefault();
+        try{
 
-            const nome = document.getElementById("nome").value;
+            const response =
+                await fetch(
 
-            const cargo = document.getElementById("cargo").value;
+                    API + endpoint,
 
-            const salario = document.getElementById("salario").value;
+                    {
 
-            const email = document.getElementById("email").value;
+                        method: "POST",
 
-            if(idEditando){
+                        headers: {
 
-                const index = funcionarios.findIndex(
-                    f => f.id == idEditando
+                            "Content-Type":
+                            "application/json"
+
+                        },
+
+                        body: JSON.stringify(
+                            funcionario
+                        )
+
+                    }
+
                 );
 
-                funcionarios[index] = {
+            const data =
+                await response.json();
 
-                    ...funcionarios[index],
+            console.log(
+                "RESPOSTA API:",
+                data
+            );
 
-                    nome,
-                    cargo,
-                    salario,
-                    email
+            if(!data.success){
 
-                };
+                alert(
 
-            }else{
+                    data.message +
+                    "\n" +
+                    (data.erro || "")
 
-                funcionarios.push({
+                );
 
-                    id: funcionarios.length + 1,
-
-                    nome,
-                    cargo,
-                    salario,
-                    email
-
-                });
-
+                return;
             }
 
-            salvarLocalStorage();
+            alert(
+                data.message
+                ||
+                "Funcionário salvo com sucesso"
+            );
 
-            window.location.href = "funcionarios.php";
+            form.reset();
 
-        });
+            editando = null;
+
+            carregarFuncionarios();
+
+        }catch(error){
+
+            console.log(error);
+
+            alert(
+                "Erro ao conectar com a API"
+            );
+
+        }
 
     }
+);
 
-});
+function editarFuncionario(
+    funcionario
+){
+
+    editando =
+        funcionario.id;
+
+    document.getElementById(
+        "nome"
+    ).value =
+        funcionario.nome;
+
+    document.getElementById(
+        "cargo"
+    ).value =
+        funcionario.cargo;
+
+    document.getElementById(
+        "salario"
+    ).value =
+        funcionario.salario;
+
+    document.getElementById(
+        "email"
+    ).value =
+        funcionario.email;
+
+    document.getElementById(
+        "data_admissao"
+    ).value =
+        funcionario.data_admissao
+        || "";
+
+    document.getElementById(
+        "horario_entrada"
+    ).value =
+        funcionario.horario_entrada
+        || "";
+
+    document.getElementById(
+        "horario_saida"
+    ).value =
+        funcionario.horario_saida
+        || "";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+function solicitarExclusao(id, nomeCodificado) {
+
+    window.location.href =
+        "excluir_funcionario.php?id=" +
+        id +
+        "&nome=" +
+        nomeCodificado;
+
+}
+
+carregarFuncionarios();

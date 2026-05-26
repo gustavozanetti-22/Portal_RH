@@ -1,12 +1,5 @@
 <?php
-
 session_start();
-
-if(!isset($_SESSION['usuario'])){
-    header("Location: login.php");
-    exit();
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -15,117 +8,175 @@ if(!isset($_SESSION['usuario'])){
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Funcionários - RH Digital</title>
-
-    <link rel="stylesheet" href="css/style.css">
+    <title>
+        Funcionários - MacosRH
+    </title>
 
     <link rel="stylesheet" href="css/funcionarios.css">
 
 </head>
 <body>
 
-    <div class="dashboard">
+    <div class="container">
 
-        <!-- MENU -->
-        <div class="sidebar">
+        <div class="topo">
 
-            <h2>MacosTech</h2>
+            <h1>
+                Funcionários
+            </h1>
 
-            <ul>
+            <div class="acoes-topo">
 
-                <li>
-                    <a href="dashboard.php">Página Inicial</a>
-                </li>
+                <a
+                    href="dashboard.php"
+                    class="btn-home"
+                >
+                    Página Inicial
+                </a>
 
-                <li>
-                    <a href="ferias.php">Férias</a>
-                </li>
+                <a
+                    href="php/logout.php"
+                    class="btn-logout"
+                >
+                    Logout
+                </a>
 
-                <li>
-                    <a href="ponto.php">Controle de Ponto</a>
-                </li>
-
-                <li>
-                    <a href="beneficios.php">Benefícios</a>
-                </li>
+            </div>
 
         </div>
 
-        <!-- CONTEÚDO -->
-        <div class="content">
+        <div class="card-form">
 
-            <div class="topo-funcionarios">
+            <h2>
+                Cadastro de Funcionários
+            </h2>
 
-                <h1>Funcionários</h1>
+            <form id="form-funcionario">
 
-                <button class="btn-funcionario" onclick="abrirFormulario()">
-                    + Novo Funcionário
+                <div class="grid-form">
+
+                    <div class="input-group">
+
+                        <label>
+                            Nome
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nome"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>
+                            Cargo
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cargo"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>
+                            Salário
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            id="salario"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>
+                            Data de admissão
+                        </label>
+
+                        <input
+                            type="date"
+                            id="data_admissao"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>
+                            Horário Entrada
+                        </label>
+
+                        <input
+                            type="time"
+                            id="horario_entrada"
+                        >
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>
+                            Horário Saída
+                        </label>
+
+                        <input
+                            type="time"
+                            id="horario_saida"
+                        >
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn-salvar"
+                >
+                    Salvar Funcionário
                 </button>
 
-            </div>
+            </form>
 
-            <!-- CARDS -->
-            <div class="cards-funcionarios">
+        </div>
 
-                <div class="card-funcionario">
+        <div class="card-tabela">
 
-                    <h3>Total Funcionários</h3>
+            <h2>
+                Lista de Funcionários
+            </h2>
 
-                    <p id="totalFuncionarios">0</p>
-
-                </div>
-
-                <div class="card-funcionario">
-
-                    <h3>Folha Salarial</h3>
-
-                    <p id="folhaSalarial">R$ 0</p>
-
-                </div>
-
-            </div>
-
-            <!-- FILTROS -->
-            <div class="form-funcionario">
-
-                <h2>Filtrar Funcionários</h2>
-
-                <div class="grid-funcionarios">
-
-                    <div class="input-group">
-
-                        <label>Nome</label>
-
-                        <input 
-                            type="text"
-                            id="filtroNome"
-                            placeholder="Digite o nome"
-                        >
-
-                    </div>
-
-                    <div class="input-group">
-
-                        <label>Cargo</label>
-
-                        <input 
-                            type="text"
-                            id="filtroCargo"
-                            placeholder="Digite o cargo"
-                        >
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- TABELA -->
-            <div class="tabela-funcionarios">
-
-                <h2>Lista de Funcionários</h2>
+            <div class="table-wrapper">
 
                 <table>
 
@@ -133,18 +184,27 @@ if(!isset($_SESSION['usuario'])){
 
                         <tr>
 
-                            <th>ID</th>
                             <th>Nome</th>
+
                             <th>Cargo</th>
+
                             <th>Salário</th>
+
                             <th>Email</th>
+
+                            <th>Admissão</th>
+
+                            <th>Entrada</th>
+
+                            <th>Saída</th>
+
                             <th>Ações</th>
 
                         </tr>
 
                     </thead>
 
-                    <tbody id="tabelaFuncionarios">
+                    <tbody id="tbody-funcionarios">
 
                     </tbody>
 

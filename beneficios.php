@@ -1,12 +1,5 @@
 <?php
-
 session_start();
-
-if(!isset($_SESSION['usuario'])){
-    header("Location: login.php");
-    exit();
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -15,128 +8,53 @@ if(!isset($_SESSION['usuario'])){
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Benefícios</title>
+    <title>
+        Benefícios - MacosRH
+    </title>
 
-    <link rel="stylesheet" href="css/style.css">
-
-    <link rel="stylesheet" href="css/beneficios.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link
+        rel="stylesheet"
+        href="css/beneficios.css"
+    >
 
 </head>
 <body>
 
-<div class="dashboard">
+    <div class="container">
 
-    <!-- MENU -->
-    <div class="sidebar">
+        <div class="topo">
 
-        <h2>MacosTech</h2>
+            <h1>
+                Benefícios
+            </h1>
 
-            <ul>
+            <div class="acoes-topo">
 
-                <li>
-                    <a href="dashboard.php">Página Inicial</a>
-                </li>
-
-                <li>
-                    <a href="funcionarios.php">Funcionários</a>
-                </li>
-
-                <li>
-                    <a href="ferias.php">Férias</a>
-                </li>
-
-                <li>
-                    <a href="ponto.php">Controle de Ponto</a>
-                </li>
-
-
-
-    </div>
-
-    <!-- CONTEÚDO -->
-    <div class="content">
-
-        <div class="topo-beneficios">
-
-            <h1>Controle de Benefícios</h1>
-
-            <button 
-                class="btn-relatorio"
-                onclick="gerarRelatorioPDF()"
-            >
-
-                Gerar Relatório PDF
-
-            </button>
-
-        </div>
-
-        <!-- CARDS -->
-        <div class="cards-beneficios">
-
-            <div class="card-beneficio">
-
-                <h3>Total Funcionários</h3>
-
-                <p id="totalFuncionarios">0</p>
-
-            </div>
-
-            <div class="card-beneficio">
-
-                <h3>Convênio Ativo</h3>
-
-                <p id="totalConvenio">0</p>
-
-            </div>
-
-            <div class="card-beneficio">
-
-                <h3>Vale Transporte</h3>
-
-                <p id="totalVT">0</p>
-
-            </div>
-
-        </div>
-
-        <!-- FILTROS -->
-        <div class="filtro-box">
-
-            <h2>Filtros</h2>
-
-            <div class="grid-filtro">
-
-                <input 
-                    type="text"
-                    id="filtroNome"
-                    placeholder="Buscar funcionário"
+                <a
+                    href="dashboard.php"
+                    class="btn-home"
                 >
+                    Página Inicial
+                </a>
 
-                <select id="filtroConvenio">
-
-                    <option value="">
-                        Todos os convênios
-                    </option>
-
-                    <option value="Sim">
-                        Convênio ativo
-                    </option>
-
-                    <option value="Não">
-                        Sem convênio
-                    </option>
-
-                </select>
+                <a
+                    href="php/logout.php"
+                    class="btn-logout"
+                >
+                    Logout
+                </a>
 
             </div>
 
         </div>
 
-        <!-- TABELA -->
-        <div class="tabela-beneficios">
+        <div class="card">
 
             <table>
 
@@ -148,11 +66,13 @@ if(!isset($_SESSION['usuario'])){
 
                         <th>Convênio</th>
 
-                        <th>Vale Transporte</th>
+                        <th>VT</th>
 
-                        <th>Vale Refeição</th>
+                        <th>VR</th>
 
-                        <th>Plano Odontológico</th>
+                        <th>VA</th>
+
+                        <th>Odonto</th>
 
                         <th>Ações</th>
 
@@ -160,7 +80,7 @@ if(!isset($_SESSION['usuario'])){
 
                 </thead>
 
-                <tbody id="tabelaBeneficios">
+                <tbody id="tbody-beneficios">
 
                 </tbody>
 
@@ -170,9 +90,133 @@ if(!isset($_SESSION['usuario'])){
 
     </div>
 
-</div>
+    <div
+        class="modal"
+        id="modal-beneficios"
+    >
 
-<script src="js/beneficios.js"></script>
+        <div class="modal-content">
+
+            <h2>
+                Editar Benefícios
+            </h2>
+
+            <form id="form-beneficios">
+
+                <input
+                    type="hidden"
+                    id="funcionario_id"
+                >
+
+                <div class="checkbox-group">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="convenio_ativo"
+                        >
+
+                        Convênio ativo
+
+                    </label>
+
+                </div>
+
+                <div class="checkbox-group">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="vale_transporte"
+                        >
+
+                        Vale Transporte
+
+                    </label>
+
+                </div>
+
+                <div class="checkbox-group">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="vale_refeicao"
+                        >
+
+                        Vale Refeição
+
+                    </label>
+
+                </div>
+
+                <div class="checkbox-group">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="vale_alimentacao"
+                        >
+
+                        Vale Alimentação
+
+                    </label>
+
+                </div>
+
+                <div class="checkbox-group">
+
+                    <label>
+
+                        <input
+                            type="checkbox"
+                            id="plano_odontologico"
+                        >
+
+                        Plano Odontológico
+
+                    </label>
+
+                </div>
+
+                <div class="input-group">
+
+                    <label>
+                        Observações
+                    </label>
+
+                    <textarea
+                        id="observacoes"
+                    ></textarea>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn-salvar"
+                >
+                    Salvar
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-cancelar"
+                    onclick="fecharModal()"
+                >
+                    Cancelar
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script src="js/beneficios.js"></script>
 
 </body>
 </html>

@@ -1,16 +1,20 @@
 *{
+
     margin: 0;
+
     padding: 0;
+
     box-sizing: border-box;
+
+    font-family: Arial, sans-serif;
+
 }
 
 body{
 
-    font-family: Arial, Helvetica, sans-serif;
+    background: #0f172a;
 
-    background: #f4f6f9;
-
-    height: 100vh;
+    min-height: 100vh;
 
     display: flex;
 
@@ -19,8 +23,6 @@ body{
     align-items: center;
 
 }
-
-/* CONTAINER */
 
 .login-container{
 
@@ -36,63 +38,45 @@ body{
 
 }
 
-/* CARD LOGIN */
-
 .login-box{
+
+    background: #1e293b;
 
     width: 100%;
 
     max-width: 420px;
 
-    background-color: white;
+    padding: 40px;
 
-    padding: 45px;
+    border-radius: 20px;
 
-    border-radius: 18px;
-
-    box-shadow: 0px 8px 25px rgba(0,0,0,0.08);
-
-    display: flex;
-
-    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 
 }
 
-/* TITULO */
+.logo{
 
-.login-box h1{
+    text-align: center;
 
-    font-size: 34px;
+    margin-bottom: 30px;
 
-    color: #111827;
+}
+
+.logo h1{
+
+    color: #60a5fa;
+
+    font-size: 36px;
 
     margin-bottom: 10px;
 
-    text-align: center;
-
 }
 
-/* ERRO */
+.logo p{
 
-.erro{
-
-    background-color: #fee2e2;
-
-    color: #b91c1c;
-
-    padding: 12px;
-
-    border-radius: 10px;
-
-    margin-bottom: 20px;
-
-    text-align: center;
-
-    font-size: 14px;
+    color: #cbd5e1;
 
 }
-
-/* INPUTS */
 
 .input-group{
 
@@ -100,67 +84,53 @@ body{
 
     flex-direction: column;
 
-    margin-bottom: 22px;
+    margin-bottom: 20px;
 
 }
 
 .input-group label{
 
+    color: white;
+
     margin-bottom: 8px;
 
-    font-weight: 600;
-
-    color: #374151;
-
-    font-size: 14px;
+    font-weight: bold;
 
 }
 
 .input-group input{
 
-    padding: 15px;
+    padding: 14px;
 
-    border: 1px solid #d1d5db;
+    border-radius: 10px;
 
-    border-radius: 12px;
+    border: none;
+
+    background: #334155;
+
+    color: white;
 
     font-size: 15px;
-
-    transition: 0.3s;
-
-    background-color: #f9fafb;
 
 }
 
 .input-group input:focus{
 
-    outline: none;
-
-    border-color: #2563eb;
-
-    box-shadow: 0px 0px 0px 4px rgba(37,99,235,0.12);
-
-    background-color: white;
+    outline: 2px solid #60a5fa;
 
 }
-
-/* BOTÃO */
 
 .btn-login{
 
     width: 100%;
 
-    padding: 15px;
+    padding: 14px;
 
     border: none;
 
-    border-radius: 12px;
+    border-radius: 10px;
 
-    background: linear-gradient(
-        135deg,
-        #1e3a8a,
-        #2563eb
-    );
+    background: #60a5fa;
 
     color: white;
 
@@ -172,50 +142,24 @@ body{
 
     transition: 0.3s;
 
-    margin-top: 10px;
-
 }
 
 .btn-login:hover{
 
-    transform: translateY(-2px);
+    background: #3b82f6;
 
-    opacity: 0.95;
+    transform: translateY(-2px);
 
 }
 
-/* LINK VOLTAR */
+.erro{
 
-.voltar{
-
-    margin-top: 22px;
+    color: #f87171;
 
     text-align: center;
 
-    text-decoration: none;
+    margin-top: 20px;
 
-    color: #6b7280;
-
-    font-size: 14px;
-
-    transition: 0.2s;
-
-}
-
-.voltar:hover{
-
-    color: #2563eb;
-
-}
-
-/* RESPONSIVO */
-
-@media(max-width: 500px){
-
-    .login-box{
-
-        padding: 30px;
-
-    }
+    font-weight: bold;
 
 }

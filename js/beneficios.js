@@ -1,46 +1,55 @@
-const funcionarios = JSON.parse(
-    localStorage.getItem("funcionarios")
-) || [];
+const API_FUNCIONARIOS =
+"api/funcionarios/";
 
-let beneficios = JSON.parse(
-    localStorage.getItem("beneficios")
-) || [];
+const API_BENEFICIOS =
+"api/beneficios/";
 
-function salvarBeneficios(){
+const tbody =
+document.getElementById(
+    "tbody-beneficios"
+);
 
-    localStorage.setItem(
-        "beneficios",
-        JSON.stringify(beneficios)
+const modal =
+document.getElementById(
+    "modal-beneficios"
+);
+
+const form =
+document.getElementById(
+    "form-beneficios"
+);
+
+async function carregarBeneficios(){
+
+    const responseFuncionarios =
+    await fetch(
+        API_FUNCIONARIOS +
+        "listar.php"
     );
 
-}
+    const funcionarios =
+    await responseFuncionarios.json();
 
-function buscarBeneficioFuncionario(id){
-
-    return beneficios.find(
-        b => b.funcionarioId == id
+    const responseBeneficios =
+    await fetch(
+        API_BENEFICIOS +
+        "listar.php"
     );
 
-}
+    const beneficios =
+    await responseBeneficios.json();
 
-function renderizarTabela(lista = funcionarios){
+    tbody.innerHTML = "";
 
-    const tabela = document.getElementById(
-        "tabelaBeneficios"
-    );
+    funcionarios.forEach(funcionario => {
 
-    if(!tabela) return;
+        const registro =
+        beneficios.find(b =>
+            b.funcionario_id ==
+            funcionario.id
+        );
 
-    tabela.innerHTML = "";
-
-    lista.forEach(funcionario => {
-
-        const dados =
-            buscarBeneficioFuncionario(
-                funcionario.id
-            );
-
-        tabela.innerHTML += `
+        tbody.innerHTML += `
 
             <tr>
 
@@ -50,33 +59,41 @@ function renderizarTabela(lista = funcionarios){
 
                 <td>
                     ${
-                        dados
-                        ? dados.convenio
-                        : "-"
+                        registro?.convenio_ativo == 1
+                        ? "Sim"
+                        : "Não"
                     }
                 </td>
 
                 <td>
                     ${
-                        dados
-                        ? dados.valeTransporte
-                        : "-"
+                        registro?.vale_transporte == 1
+                        ? "Sim"
+                        : "Não"
                     }
                 </td>
 
                 <td>
                     ${
-                        dados
-                        ? dados.valeRefeicao
-                        : "-"
+                        registro?.vale_refeicao == 1
+                        ? "Sim"
+                        : "Não"
                     }
                 </td>
 
                 <td>
                     ${
-                        dados
-                        ? dados.odontologico
-                        : "-"
+                        registro?.vale_alimentacao == 1
+                        ? "Sim"
+                        : "Não"
+                    }
+                </td>
+
+                <td>
+                    ${
+                        registro?.plano_odontologico == 1
+                        ? "Sim"
+                        : "Não"
                     }
                 </td>
 
@@ -84,7 +101,10 @@ function renderizarTabela(lista = funcionarios){
 
                     <button
                         class="btn-editar"
-                        onclick="editarBeneficios(${funcionario.id})"
+                        onclick='abrirModal(
+                            ${JSON.stringify(funcionario)},
+                            ${JSON.stringify(registro)}
+                        )'
                     >
                         Editar
                     </button>
@@ -97,285 +117,171 @@ function renderizarTabela(lista = funcionarios){
 
     });
 
-    atualizarCards();
+}
+
+function abrirModal(
+    funcionario,
+    registro
+){
+
+    modal.style.display =
+    "flex";
+
+    document.getElementById(
+        "funcionario_id"
+    ).value =
+    funcionario.id;
+
+    document.getElementById(
+        "convenio_ativo"
+    ).checked =
+    registro?.convenio_ativo == 1;
+
+    document.getElementById(
+        "vale_transporte"
+    ).checked =
+    registro?.vale_transporte == 1;
+
+    document.getElementById(
+        "vale_refeicao"
+    ).checked =
+    registro?.vale_refeicao == 1;
+
+    document.getElementById(
+        "vale_alimentacao"
+    ).checked =
+    registro?.vale_alimentacao == 1;
+
+    document.getElementById(
+        "plano_odontologico"
+    ).checked =
+    registro?.plano_odontologico == 1;
+
+    document.getElementById(
+        "observacoes"
+    ).value =
+    registro?.observacoes || "";
 
 }
 
-function atualizarCards(){
+function fecharModal(){
 
-    document.getElementById(
-        "totalFuncionarios"
-    ).innerText =
-        funcionarios.length;
-
-    document.getElementById(
-        "totalConvenio"
-    ).innerText =
-        beneficios.filter(
-            b => b.convenio === "Sim"
-        ).length;
-
-    document.getElementById(
-        "totalVT"
-    ).innerText =
-        beneficios.filter(
-            b => b.valeTransporte === "Sim"
-        ).length;
+    modal.style.display =
+    "none";
 
 }
 
-function editarBeneficios(id){
+form.addEventListener(
+    "submit",
+    async function(e){
 
-    window.location.href =
-        `beneficios-formulario.php?id=${id}`;
+        e.preventDefault();
 
-}
+        const dados = {
 
-function filtrarFuncionarios(){
+            funcionario_id:
+            document.getElementById(
+                "funcionario_id"
+            ).value,
 
-    const nome = document
-    .getElementById("filtroNome")
-    .value
-    .toLowerCase();
+            convenio_ativo:
+            document.getElementById(
+                "convenio_ativo"
+            ).checked ? 1 : 0,
 
-    const convenio = document
-    .getElementById("filtroConvenio")
-    .value;
+            vale_transporte:
+            document.getElementById(
+                "vale_transporte"
+            ).checked ? 1 : 0,
 
-    const filtrados =
-        funcionarios.filter(funcionario => {
+            vale_refeicao:
+            document.getElementById(
+                "vale_refeicao"
+            ).checked ? 1 : 0,
 
-            const dados =
-                buscarBeneficioFuncionario(
-                    funcionario.id
-                );
+            vale_alimentacao:
+            document.getElementById(
+                "vale_alimentacao"
+            ).checked ? 1 : 0,
 
-            const nomeOk =
-                funcionario.nome
-                .toLowerCase()
-                .includes(nome);
+            plano_odontologico:
+            document.getElementById(
+                "plano_odontologico"
+            ).checked ? 1 : 0,
 
-            const convenioOk =
-                convenio === ""
-                ||
-                (
+            observacoes:
+            document.getElementById(
+                "observacoes"
+            ).value
+
+        };
+
+        const responseBeneficios =
+        await fetch(
+            API_BENEFICIOS +
+            "listar.php"
+        );
+
+        const lista =
+        await responseBeneficios.json();
+
+        const existe =
+        lista.find(b =>
+            b.funcionario_id ==
+            dados.funcionario_id
+        );
+
+        const endpoint =
+        existe
+        ? "editar.php"
+        : "salvar.php";
+
+        await fetch(
+
+            API_BENEFICIOS +
+            endpoint,
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                    "application/json"
+
+                },
+
+                body: JSON.stringify(
                     dados
-                    &&
-                    dados.convenio === convenio
-                );
-
-            return nomeOk && convenioOk;
-
-        });
-
-    renderizarTabela(filtrados);
-
-}
-
-function gerarRelatorioPDF(){
-
-    let conteudo = `
-RELATÓRIO DE BENEFÍCIOS
-
-`;
-
-    funcionarios.forEach(funcionario => {
-
-        const dados =
-            buscarBeneficioFuncionario(
-                funcionario.id
-            );
-
-        conteudo += `
-
-Funcionário:
-${funcionario.nome}
-
-Convênio:
-${dados ? dados.convenio : "-"}
-
-Vale Transporte:
-${dados ? dados.valeTransporte : "-"}
-
-Vale Refeição:
-${dados ? dados.valeRefeicao : "-"}
-
-Plano Odontológico:
-${dados ? dados.odontologico : "-"}
-
------------------------------------
-
-`;
-
-    });
-
-    const blob = new Blob(
-        [conteudo],
-        { type: "application/pdf" }
-    );
-
-    const link =
-        document.createElement("a");
-
-    link.href =
-        URL.createObjectURL(blob);
-
-    link.download =
-        "relatorio-beneficios.pdf";
-
-    link.click();
-
-}
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        renderizarTabela();
-
-        const filtroNome =
-            document.getElementById(
-                "filtroNome"
-            );
-
-        const filtroConvenio =
-            document.getElementById(
-                "filtroConvenio"
-            );
-
-        if(filtroNome){
-
-            filtroNome.addEventListener(
-                "input",
-                filtrarFuncionarios
-            );
-
-        }
-
-        if(filtroConvenio){
-
-            filtroConvenio.addEventListener(
-                "change",
-                filtrarFuncionarios
-            );
-
-        }
-
-        const form =
-            document.getElementById(
-                "formBeneficios"
-            );
-
-        if(form){
-
-            const params =
-                new URLSearchParams(
-                    window.location.search
-                );
-
-            const id =
-                params.get("id");
-
-            const funcionario =
-                funcionarios.find(
-                    f => f.id == id
-                );
-
-            const dados =
-                buscarBeneficioFuncionario(id);
-
-            if(funcionario){
-
-                document.getElementById(
-                    "funcionario"
-                ).value =
-                    funcionario.nome;
+                )
 
             }
 
-            if(dados){
+        );
 
-                document.getElementById(
-                    "convenio"
-                ).value =
-                    dados.convenio;
+        alert(
+            "Benefícios salvos!"
+        );
 
-                document.getElementById(
-                    "valeTransporte"
-                ).value =
-                    dados.valeTransporte;
+        fecharModal();
 
-                document.getElementById(
-                    "valeRefeicao"
-                ).value =
-                    dados.valeRefeicao;
+        carregarBeneficios();
 
-                document.getElementById(
-                    "odontologico"
-                ).value =
-                    dados.odontologico;
+    }
+);
 
-            }
+window.addEventListener(
+    "click",
+    function(e){
 
-            form.addEventListener(
-                "submit",
-                (e) => {
+        if(e.target == modal){
 
-                    e.preventDefault();
-
-                    const novoBeneficio = {
-
-                        funcionarioId: id,
-
-                        convenio:
-                        document.getElementById(
-                            "convenio"
-                        ).value,
-
-                        valeTransporte:
-                        document.getElementById(
-                            "valeTransporte"
-                        ).value,
-
-                        valeRefeicao:
-                        document.getElementById(
-                            "valeRefeicao"
-                        ).value,
-
-                        odontologico:
-                        document.getElementById(
-                            "odontologico"
-                        ).value
-
-                    };
-
-                    const index =
-                        beneficios.findIndex(
-                            b => b.funcionarioId == id
-                        );
-
-                    if(index >= 0){
-
-                        beneficios[index] =
-                            novoBeneficio;
-
-                    }else{
-
-                        beneficios.push(
-                            novoBeneficio
-                        );
-
-                    }
-
-                    salvarBeneficios();
-
-                    window.location.href =
-                        "beneficios.php";
-
-                }
-            );
+            fecharModal();
 
         }
 
     }
 );
+
+carregarBeneficios();

@@ -1,389 +1,623 @@
-const funcionarios = JSON.parse(
-    localStorage.getItem("funcionarios")
-) || [];
+const API_FUNCIONARIOS =
+"api/funcionarios/";
 
-let ferias = JSON.parse(
-    localStorage.getItem("ferias")
-) || [];
+const API_FERIAS =
+"api/ferias/";
 
-function salvarFerias(){
+const tbody =
+document.getElementById(
+    "tbody-ferias"
+);
 
-    localStorage.setItem(
-        "ferias",
-        JSON.stringify(ferias)
+const modal =
+document.getElementById(
+    "modal-ferias"
+);
+
+const form =
+document.getElementById(
+    "form-ferias"
+);
+
+const selectAno =
+document.getElementById(
+    "ano-ferias"
+);
+
+const btnCarregarFerias =
+document.getElementById(
+    "btn-carregar-ferias"
+);
+
+btnCarregarFerias.addEventListener(
+    "click",
+    carregarFerias
+);
+
+function dataLocal(dataString){
+
+    if(!dataString){
+        return null;
+    }
+
+    const partes =
+    dataString.split("-");
+
+    return new Date(
+        parseInt(partes[0]),
+        parseInt(partes[1]) - 1,
+        parseInt(partes[2])
     );
 
 }
 
 function formatarData(data){
 
-    if(!data){
+    if(!data) return "-";
 
-        return "Inicio na empresa";
+    const partes =
+    data.split("-");
+
+    if(partes.length !== 3){
+        return data;
+    }
+
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+}
+
+function calcularDiasTrabalhados(
+    dataBase,
+    anoReferencia
+){
+
+    if(!dataBase){
+        return 0;
+    }
+
+    const inicio =
+    dataLocal(dataBase);
+
+    const hoje =
+    new Date();
+
+    let fim =
+    new Date(
+        parseInt(anoReferencia),
+        11,
+        31
+    );
+
+    if(
+        hoje.getFullYear() ===
+        parseInt(anoReferencia)
+    ){
+        fim = hoje;
+    }
+
+    if(inicio > fim){
+        return 0;
+    }
+
+    const diferenca =
+    fim.getTime() -
+    inicio.getTime();
+
+    return Math.floor(
+        diferenca /
+        (1000 * 60 * 60 * 24)
+    );
+
+}
+
+function verificarStatusFerias(
+    dataSaida,
+    retorno
+){
+
+    if(!dataSaida || !retorno){
+
+        return "Ativo";
 
     }
 
-    return new Date(data)
-    .toLocaleDateString("pt-BR");
+    const hoje =
+    new Date();
 
-}
+    const inicio =
+    dataLocal(dataSaida);
 
-function calcularDias(data){
+    const fim =
+    dataLocal(retorno);
 
-    if(!data){
+    if(
+        hoje >= inicio &&
+        hoje <= fim
+    ){
 
-        return "Inicio na empresa";
-
-    }
-
-    const hoje = new Date();
-
-    const ultima = new Date(data);
-
-    const diferenca = hoje - ultima;
-
-    const dias = Math.floor(
-        diferenca / (1000 * 60 * 60 * 24)
-    );
-
-    return dias + " dias";
-
-}
-
-function calcularRetorno(data, vendeu){
-
-    if(!data){
-
-        return "-";
+        return "Em férias";
 
     }
 
-    const retorno = new Date(data);
-
-    retorno.setDate(
-
-        retorno.getDate() +
-
-        (
-            vendeu === "Sim"
-            ? 20
-            : 30
-        )
-
-    );
-
-    return retorno.toLocaleDateString("pt-BR");
+    return "Ativo";
 
 }
 
-function buscarFeriasFuncionario(id){
+async function carregarFerias(){
 
-    return ferias.find(
-        f => f.funcionarioId == id
-    );
+    try{
 
-}
+        const anoReferencia =
+        selectAno.value;
 
-function renderizarTabela(){
+        const responseFuncionarios =
+        await fetch(
+            API_FUNCIONARIOS +
+            "listar.php"
+        );
 
-    const tabela = document
-    .getElementById("tabelaFerias");
+        const funcionarios =
+        await responseFuncionarios.json();
 
-    if(!tabela) return;
+        const responseFerias =
+        await fetch(
+            API_FERIAS +
+            "listar.php"
+        );
 
-    tabela.innerHTML = "";
+        const ferias =
+        await responseFerias.json();
 
-    funcionarios.forEach(funcionario => {
+        tbody.innerHTML = "";
 
-        const dadosFerias =
-            buscarFeriasFuncionario(funcionario.id);
+        funcionarios.forEach(funcionario => {
 
-        tabela.innerHTML += `
-
-            <tr>
-
-                <td>
-                    ${funcionario.nome}
-                </td>
-
-                <td>
-                    ${
-                        dadosFerias
-                        ? formatarData(
-                            dadosFerias.ultimaFerias
-                        )
-                        : "-"
-                    }
-                </td>
-
-                <td>
-                    ${
-                        dadosFerias
-                        ? calcularDias(
-                            dadosFerias.ultimaFerias
-                        )
-                        : "-"
-                    }
-                </td>
-
-                <td>
-                    ${
-                        dadosFerias
-                        ? formatarData(
-                            dadosFerias.saidaFerias
-                        )
-                        : "-"
-                    }
-                </td>
-
-                <td>
-                    ${
-                        dadosFerias
-                        ? calcularRetorno(
-                            dadosFerias.saidaFerias,
-                            dadosFerias.vendeuDias
-                        )
-                        : "-"
-                    }
-                </td>
-
-                <td>
-                    ${
-                        dadosFerias
-                        ? dadosFerias.vendeuDias
-                        : "-"
-                    }
-                </td>
-
-                <td>
-                    ${
-                        dadosFerias
-                        ? dadosFerias.feriasPagas
-                        : "-"
-                    }
-                </td>
-
-                <td>
-
-                    <button
-                        class="btn-editar"
-                        onclick="editarFerias(${funcionario.id})"
-                    >
-                        Editar
-                    </button>
-
-                </td>
-
-            </tr>
-
-        `;
-
-    });
-
-    atualizarCards();
-
-}
-
-function atualizarCards(){
-
-    document.getElementById(
-        "totalFuncionarios"
-    ).innerText = funcionarios.length;
-
-    document.getElementById(
-        "emFerias"
-    ).innerText = ferias.length;
-
-    document.getElementById(
-        "feriasPagas"
-    ).innerText = ferias.filter(
-        f => f.feriasPagas === "Sim"
-    ).length;
-
-}
-
-function editarFerias(id){
-
-    window.location.href =
-        `ferias-formulario.php?id=${id}`;
-
-}
-
-function gerarRelatorio(){
-
-    let conteudo = `
-RELATÓRIO DE FÉRIAS
-
-`;
-
-    funcionarios.forEach(funcionario => {
-
-        const dados =
-            buscarFeriasFuncionario(funcionario.id);
-
-        conteudo += `
-
-Funcionário:
-${funcionario.nome}
-
-Últimas férias:
-${dados ? formatarData(dados.ultimaFerias) : "Inicio na empresa"}
-
-Saída:
-${dados ? formatarData(dados.saidaFerias) : "-"}
-
-Retorno:
-${dados ? calcularRetorno(dados.saidaFerias, dados.vendeuDias) : "-"}
-
-Vendeu 10 dias:
-${dados ? dados.vendeuDias : "-"}
-
-Férias pagas:
-${dados ? dados.feriasPagas : "-"}
-
------------------------------------
-
-`;
-
-    });
-
-    const blob = new Blob(
-        [conteudo],
-        { type: "text/plain" }
-    );
-
-    const link =
-        document.createElement("a");
-
-    link.href =
-        URL.createObjectURL(blob);
-
-    link.download =
-        "relatorio-ferias.txt";
-
-    link.click();
-
-}
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        renderizarTabela();
-
-        const form =
-            document.getElementById("formFerias");
-
-        if(form){
-
-            const params =
-                new URLSearchParams(
-                    window.location.search
-                );
-
-            const id =
-                params.get("id");
-
-            const funcionario =
-                funcionarios.find(
-                    f => f.id == id
-                );
-
-            const dadosFerias =
-                buscarFeriasFuncionario(id);
-
-            if(funcionario){
-
-                document.getElementById(
-                    "funcionario"
-                ).value =
-                    funcionario.nome;
-
-            }
-
-            if(dadosFerias){
-
-                document.getElementById(
-                    "ultimaFerias"
-                ).value =
-                    dadosFerias.ultimaFerias;
-
-                document.getElementById(
-                    "saidaFerias"
-                ).value =
-                    dadosFerias.saidaFerias;
-
-                document.getElementById(
-                    "vendeuDias"
-                ).value =
-                    dadosFerias.vendeuDias;
-
-                document.getElementById(
-                    "feriasPagas"
-                ).value =
-                    dadosFerias.feriasPagas;
-
-            }
-
-            form.addEventListener(
-                "submit",
-                (e) => {
-
-                    e.preventDefault();
-
-                    const novaFerias = {
-
-                        funcionarioId: id,
-
-                        ultimaFerias:
-                        document.getElementById(
-                            "ultimaFerias"
-                        ).value,
-
-                        saidaFerias:
-                        document.getElementById(
-                            "saidaFerias"
-                        ).value,
-
-                        vendeuDias:
-                        document.getElementById(
-                            "vendeuDias"
-                        ).value,
-
-                        feriasPagas:
-                        document.getElementById(
-                            "feriasPagas"
-                        ).value
-
-                    };
-
-                    const index =
-                        ferias.findIndex(
-                            f => f.funcionarioId == id
-                        );
-
-                    if(index >= 0){
-
-                        ferias[index] =
-                            novaFerias;
-
-                    }else{
-
-                        ferias.push(
-                            novaFerias
-                        );
-
-                    }
-
-                    salvarFerias();
-
-                    window.location.href =
-                        "ferias.php";
-
-                }
+            const registro =
+            ferias.find(f =>
+                f.funcionario_id ==
+                funcionario.id
             );
+
+            const jaTirouFerias =
+            registro?.nunca_tirou_ferias == 1
+            ? 0
+            : 1;
+
+            const baseContagem =
+            jaTirouFerias == 0
+            ? funcionario.data_admissao
+            : (
+                registro?.ultima_feria ||
+                funcionario.data_admissao
+            );
+
+            const diasTrabalhados =
+            calcularDiasTrabalhados(
+                baseContagem,
+                anoReferencia
+            );
+
+            const funcionarioJson =
+            JSON.stringify(funcionario)
+            .replace(/'/g, "&apos;");
+
+            const registroJson =
+            JSON.stringify(registro || null)
+            .replace(/'/g, "&apos;");
+
+            tbody.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${funcionario.nome}
+                    </td>
+
+                    <td>
+                        ${
+                            formatarData(
+                                funcionario.data_admissao
+                            )
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            formatarData(
+                                baseContagem
+                            )
+                        }
+                    </td>
+
+                    <td>
+                        ${diasTrabalhados}
+                    </td>
+
+                    <td>
+                        ${
+                            jaTirouFerias == 0
+                            ? "Nunca tirou"
+                            : (
+                                formatarData(
+                                    registro?.ultima_feria
+                                )
+                            )
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            formatarData(
+                                registro?.proxima_feria
+                            )
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            formatarData(
+                                registro?.data_saida
+                            )
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            formatarData(
+                                registro?.retorno_ferias
+                            )
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            registro?.vendeu_10_dias == 1
+                            ? "Sim"
+                            : "Não"
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            registro?.ferias_pagas == 1
+                            ? "Sim"
+                            : "Não"
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            verificarStatusFerias(
+                                registro?.data_saida,
+                                registro?.retorno_ferias
+                            )
+                        }
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="btn-editar"
+                            onclick='abrirModal(
+                                ${funcionarioJson},
+                                ${registroJson}
+                            )'
+                        >
+                            Editar
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Erro ao carregar férias."
+        );
+
+    }
+
+}
+
+function abrirModal(
+    funcionario,
+    registro
+){
+
+    modal.style.display =
+    "flex";
+
+    document.getElementById(
+        "funcionario_id"
+    ).value =
+    funcionario.id;
+
+    document.getElementById(
+        "data_admissao_funcionario"
+    ).value =
+    funcionario.data_admissao || "";
+
+    const nuncaTirou =
+    registro?.nunca_tirou_ferias == 1;
+
+    document.getElementById(
+        "ja_tirou_ferias"
+    ).value =
+    nuncaTirou ? 0 : 1;
+
+    document.getElementById(
+        "ultima_feria"
+    ).value =
+    nuncaTirou
+    ? funcionario.data_admissao || ""
+    : registro?.ultima_feria || "";
+
+    document.getElementById(
+        "data_saida"
+    ).value =
+    registro?.data_saida || "";
+
+    document.getElementById(
+        "vendeu_10_dias"
+    ).value =
+    registro?.vendeu_10_dias || 0;
+
+    document.getElementById(
+        "ferias_pagas"
+    ).value =
+    registro?.ferias_pagas || 0;
+
+    document.getElementById(
+        "observacoes"
+    ).value =
+    registro?.observacoes || "";
+
+    controlarUltimaFerias();
+
+}
+
+function controlarUltimaFerias(){
+
+    const jaTirou =
+    document.getElementById(
+        "ja_tirou_ferias"
+    ).value;
+
+    const campoUltima =
+    document.getElementById(
+        "ultima_feria"
+    );
+
+    const dataAdmissao =
+    document.getElementById(
+        "data_admissao_funcionario"
+    ).value;
+
+    if(jaTirou == "0"){
+
+        campoUltima.value =
+        dataAdmissao || "";
+
+        campoUltima.disabled =
+        true;
+
+    }else{
+
+        campoUltima.disabled =
+        false;
+
+    }
+
+}
+
+document.getElementById(
+    "ja_tirou_ferias"
+).addEventListener(
+    "change",
+    controlarUltimaFerias
+);
+
+function fecharModal(){
+
+    modal.style.display =
+    "none";
+
+}
+
+form.addEventListener(
+    "submit",
+    async function(e){
+
+        e.preventDefault();
+
+        const jaTirouFerias =
+        document.getElementById(
+            "ja_tirou_ferias"
+        ).value;
+
+        const dataAdmissao =
+        document.getElementById(
+            "data_admissao_funcionario"
+        ).value;
+
+        const ultimaFerias =
+        jaTirouFerias == "0"
+        ? dataAdmissao
+        : document.getElementById(
+            "ultima_feria"
+        ).value;
+
+        const dataSaida =
+        document.getElementById(
+            "data_saida"
+        ).value;
+
+        const vendeu10 =
+        parseInt(
+            document.getElementById(
+                "vendeu_10_dias"
+            ).value
+        );
+
+        let retornoFerias = "";
+        let proximaFerias = "";
+
+        if(dataSaida){
+
+            let retorno =
+            dataLocal(dataSaida);
+
+            retorno.setDate(
+                retorno.getDate() +
+                (vendeu10 ? 20 : 30)
+            );
+
+            const proxima =
+            dataLocal(dataSaida);
+
+            proxima.setFullYear(
+                proxima.getFullYear() + 1
+            );
+
+            retornoFerias =
+            retorno
+            .toISOString()
+            .split("T")[0];
+
+            proximaFerias =
+            proxima
+            .toISOString()
+            .split("T")[0];
+
+        }
+
+        const dados = {
+
+            funcionario_id:
+            document.getElementById(
+                "funcionario_id"
+            ).value,
+
+            ultima_feria:
+            ultimaFerias,
+
+            proxima_feria:
+            proximaFerias,
+
+            data_saida:
+            dataSaida,
+
+            retorno_ferias:
+            retornoFerias,
+
+            vendeu_10_dias:
+            vendeu10,
+
+            ferias_pagas:
+            document.getElementById(
+                "ferias_pagas"
+            ).value,
+
+            nunca_tirou_ferias:
+            jaTirouFerias == "0"
+            ? 1
+            : 0,
+
+            observacoes:
+            document.getElementById(
+                "observacoes"
+            ).value
+
+        };
+
+        const responseFerias =
+        await fetch(
+            API_FERIAS +
+            "listar.php"
+        );
+
+        const lista =
+        await responseFerias.json();
+
+        const existe =
+        lista.find(f =>
+            f.funcionario_id ==
+            dados.funcionario_id
+        );
+
+        const endpoint =
+        existe
+        ? "editar.php"
+        : "salvar.php";
+
+        const response =
+        await fetch(
+
+            API_FERIAS + endpoint,
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                    "application/json"
+
+                },
+
+                body: JSON.stringify(
+                    dados
+                )
+
+            }
+
+        );
+
+        const resultado =
+        await response.json();
+
+        if(!resultado.success){
+
+            alert(
+                resultado.message +
+                "\n" +
+                (resultado.erro || "")
+            );
+
+            return;
+
+        }
+
+        alert(
+            "Férias salvas com sucesso!"
+        );
+
+        fecharModal();
+
+        carregarFerias();
+
+    }
+);
+
+window.addEventListener(
+    "click",
+    function(e){
+
+        if(e.target == modal){
+
+            fecharModal();
 
         }
 
     }
 );
+
+carregarFerias();
