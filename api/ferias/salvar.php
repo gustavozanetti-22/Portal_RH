@@ -25,50 +25,100 @@ $ferias_pagas = $data["ferias_pagas"] ?? 0;
 $nunca_tirou_ferias = $data["nunca_tirou_ferias"] ?? 0;
 $observacoes = $data["observacoes"] ?? "";
 
-$stmt = $conn->prepare(
-
-    "INSERT INTO Ferias (
-
-        funcionario_id,
-        ultima_feria,
-        proxima_feria,
-        data_saida,
-        retorno_ferias,
-        vendeu_10_dias,
-        ferias_pagas,
-        nunca_tirou_ferias,
-        observacoes
-
-    )
-
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
-
+$verifica = $conn->prepare(
+    "SELECT id FROM Ferias WHERE funcionario_id = ?"
 );
 
-if (!$stmt) {
+if (!$verifica) {
     echo json_encode([
         "success" => false,
-        "message" => "Erro no SQL de férias.",
+        "message" => "Erro ao verificar férias.",
         "erro" => $conn->error
     ]);
     exit;
 }
 
-$stmt->bind_param(
+$verifica->bind_param("i", $funcionario_id);
+$verifica->execute();
 
-    "issssiiis",
+$resultado = $verifica->get_result();
 
-    $funcionario_id,
-    $ultima_feria,
-    $proxima_feria,
-    $data_saida,
-    $retorno_ferias,
-    $vendeu_10_dias,
-    $ferias_pagas,
-    $nunca_tirou_ferias,
-    $observacoes
+if ($resultado->num_rows > 0) {
 
-);
+    $stmt = $conn->prepare(
+        "UPDATE Ferias SET
+            ultima_feria = ?,
+            proxima_feria = ?,
+            data_saida = ?,
+            retorno_ferias = ?,
+            vendeu_10_dias = ?,
+            ferias_pagas = ?,
+            nunca_tirou_ferias = ?,
+            observacoes = ?
+        WHERE funcionario_id = ?"
+    );
+
+    if (!$stmt) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Erro no SQL de atualização.",
+            "erro" => $conn->error
+        ]);
+        exit;
+    }
+
+    $stmt->bind_param(
+        "ssssiiisi",
+        $ultima_feria,
+        $proxima_feria,
+        $data_saida,
+        $retorno_ferias,
+        $vendeu_10_dias,
+        $ferias_pagas,
+        $nunca_tirou_ferias,
+        $observacoes,
+        $funcionario_id
+    );
+
+} else {
+
+    $stmt = $conn->prepare(
+        "INSERT INTO Ferias (
+            funcionario_id,
+            ultima_feria,
+            proxima_feria,
+            data_saida,
+            retorno_ferias,
+            vendeu_10_dias,
+            ferias_pagas,
+            nunca_tirou_ferias,
+            observacoes
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    );
+
+    if (!$stmt) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Erro no SQL de cadastro.",
+            "erro" => $conn->error
+        ]);
+        exit;
+    }
+
+    $stmt->bind_param(
+        "issssiiis",
+        $funcionario_id,
+        $ultima_feria,
+        $proxima_feria,
+        $data_saida,
+        $retorno_ferias,
+        $vendeu_10_dias,
+        $ferias_pagas,
+        $nunca_tirou_ferias,
+        $observacoes
+    );
+
+}
 
 if (!$stmt->execute()) {
     echo json_encode([
@@ -80,10 +130,8 @@ if (!$stmt->execute()) {
 }
 
 echo json_encode([
-
     "success" => true,
     "message" => "Férias salvas com sucesso."
-
 ]);
 
 ?>

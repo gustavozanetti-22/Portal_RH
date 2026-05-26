@@ -35,7 +35,7 @@ $nome = $_GET["nome"] ?? "funcionário";
 
             <p class="texto-exclusao">
                 Para excluir <strong><?php echo htmlspecialchars($nome); ?></strong>,
-                informe o email e a senha de login cadastrados no banco de dados.
+                informe o email e a senha de administrador.
             </p>
 
             <form id="form-exclusao">
