@@ -23,13 +23,13 @@ if(!isset($_SESSION['usuario'])){
 
     <div class="dashboard">
 
-        <!-- SIDEBAR -->
         <div class="sidebar">
 
-            <h2>MacosTech - RH</h2>
+            <div class="logo-dashboard">
+                <img src="img/logo.png" alt="Macos RH">
+            </div>
 
             <ul>
-
 
                 <li>
                     <a href="funcionarios.php">Funcionários</a>
@@ -51,50 +51,44 @@ if(!isset($_SESSION['usuario'])){
                     <a href="index.php">Logout</a>
                 </li>
 
-
             </ul>
 
         </div>
 
-        <!-- CONTEÚDO -->
         <div class="content">
 
             <h1>Bem-vindo ao Portal RH</h1>
 
             <div class="cards">
 
-<a href="funcionarios.php" class="card-link">
+                <a href="funcionarios.php" class="card-link">
+                    <div class="card">
+                        <h3>Funcionários</h3>
+                        <p>Gerencie os colaboradores</p>
+                    </div>
+                </a> 
 
-    <div class="card">
-        <h3>Funcionários</h3>
-        <p>Gerencie os colaboradores</p>
-    </div>
+                <a href="ferias.php" class="card-link">
+                    <div class="card">
+                        <h3>Férias</h3>
+                        <p>Controle de férias</p>
+                    </div>
+                </a>
 
-</a> 
+                <a href="ponto.php" class="card-link">
+                    <div class="card">
+                        <h3>Ponto</h3>
+                        <p>Registro de jornada</p>
+                    </div>
+                </a> 
 
-<a href="ferias.php" class="card-link">
+                <a href="beneficios.php" class="card-link">
+                    <div class="card">
+                        <h3>Benefícios</h3>
+                        <p>Controle de benefícios</p>
+                    </div>
+                </a> 
 
-                <div class="card">
-                    <h3>Férias</h3>
-                    <p>Controle de férias</p>
-                </div>
-</a>
-
-<a href="ponto.php" class="card-link">
-
-                <div class="card">
-                    <h3>Ponto</h3>
-                    <p>Registro de jornada</p>
-                </div>
-</a> 
-
-<a href="beneficios.php" class="card-link">
-
-                <div class="card">
-                    <h3>Benefícios</h3>
-                    <p>Controle de beneficios</p>
-                </div>
-</a> 
             </div>
 
         </div>

@@ -22,6 +22,7 @@ if (!isset($_SESSION["usuario"])) {
 
     <div class="topo">
         <h1>Controle de Férias</h1>
+<a href="relatorio_ferias.php" target="_blank" style="padding:10px 16px;background:#2563eb;color:white;border-radius:10px;text-decoration:none;font-weight:600;">Gerar Relatório PDF</a>
 
         <div class="acoes-topo">
             <a href="dashboard.php" class="btn-home">Página Inicial</a>

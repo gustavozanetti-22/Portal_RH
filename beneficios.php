@@ -33,6 +33,7 @@ session_start();
             <h1>
                 Benefícios
             </h1>
+<a href="relatorio_beneficios.php" target="_blank" style="padding:10px 16px;background:#2563eb;color:white;border-radius:10px;text-decoration:none;font-weight:600;">Gerar Relatório PDF</a>
 
             <div class="acoes-topo">
 

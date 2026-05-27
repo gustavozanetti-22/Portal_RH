@@ -72,6 +72,10 @@ async function carregarFuncionarios(){
                         </td>
 
                         <td>
+                            ${funcionario.cpf || "-"}
+                        </td>
+
+                        <td>
                             ${funcionario.cargo}
                         </td>
 
@@ -163,6 +167,11 @@ form.addEventListener(
             nome:
                 document.getElementById(
                     "nome"
+                ).value,
+
+            cpf:
+                document.getElementById(
+                    "cpf"
                 ).value,
 
             cargo:
@@ -294,6 +303,12 @@ function editarFuncionario(
         funcionario.nome;
 
     document.getElementById(
+        "cpf"
+    ).value =
+        funcionario.cpf
+        || "";
+
+    document.getElementById(
         "cargo"
     ).value =
         funcionario.cargo;
@@ -342,5 +357,23 @@ function solicitarExclusao(id, nomeCodificado) {
         nomeCodificado;
 
 }
+
+
+const campoCpf = document.getElementById("cpf");
+
+if (campoCpf) {
+    campoCpf.addEventListener("input", function () {
+        let valor = campoCpf.value.replace(/\D/g, "");
+
+        valor = valor.slice(0, 11);
+
+        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+        valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+
+        campoCpf.value = valor;
+    });
+}
+
 
 carregarFuncionarios();

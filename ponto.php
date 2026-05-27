@@ -20,6 +20,7 @@ if (!isset($_SESSION["usuario"])) {
 
     <div class="topo-pagina">
         <h1>Controle de Ponto</h1>
+<a href="relatorio_ponto.php" target="_blank" style="padding:10px 16px;background:#2563eb;color:white;border-radius:10px;text-decoration:none;font-weight:600;">Gerar Relatório PDF</a>
 
         <button class="btn-voltar-dashboard" onclick="window.location.href='dashboard.php'">
             Página inicial

@@ -29,6 +29,7 @@ session_start();
             <h1>
                 Funcionários
             </h1>
+<a href="relatorio_funcionarios.php" target="_blank" style="padding:10px 16px;background:#2563eb;color:white;border-radius:10px;text-decoration:none;font-weight:600;">Gerar Relatório PDF</a>
 
             <div class="acoes-topo">
 
@@ -69,6 +70,22 @@ session_start();
                         <input
                             type="text"
                             id="nome"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>
+                            CPF
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cpf"
+                            maxlength="14"
+                            placeholder="000.000.000-00"
                             required
                         >
 
@@ -185,6 +202,8 @@ session_start();
                         <tr>
 
                             <th>Nome</th>
+
+                            <th>CPF</th>
 
                             <th>Cargo</th>
 

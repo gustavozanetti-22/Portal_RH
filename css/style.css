@@ -288,3 +288,96 @@ body{
     }
 
 }
+
+.logo-dashboard{
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    margin-top: 30px;
+
+    margin-bottom: 40px;
+
+}
+
+.logo-dashboard img{
+
+    width: 180px;
+
+    height: auto;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(
+            0 10px 20px
+            rgba(0,0,0,0.25)
+        );
+
+}
+
+.logo-dashboard img{
+
+    width: 90px;
+
+    height: auto;
+
+    object-fit: contain;
+
+}
+
+.logo-dashboard{
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    margin-top: 20px;
+
+    margin-bottom: 30px;
+
+}
+
+.logo-dashboard img{
+
+    width: 180px;
+
+    height: auto;
+
+    object-fit: contain;
+
+}
+
+.cards-container{
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+}
+
+.logo-dashboard {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.logo-dashboard img {
+    width: 250px;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
