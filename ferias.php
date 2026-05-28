@@ -26,7 +26,6 @@ if (!isset($_SESSION["usuario"])) {
 
         <div class="acoes-topo">
             <a href="dashboard.php" class="btn-home">Página Inicial</a>
-            <a href="php/logout.php" class="btn-logout">Logout</a>
         </div>
     </div>
 

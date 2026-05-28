@@ -44,12 +44,6 @@ session_start();
                     Página Inicial
                 </a>
 
-                <a
-                    href="php/logout.php"
-                    class="btn-logout"
-                >
-                    Logout
-                </a>
 
             </div>
 
